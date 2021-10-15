@@ -1,10 +1,13 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const {VueLoaderPlugin} = require('vue-loader');
 
 module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: 'public/index.html',
+            title: 'Hostingar'
         }),
+        new VueLoaderPlugin()
     ],
     module: {
         rules: [
@@ -22,6 +25,10 @@ module.exports = {
                 test: /\.css$/,
                 use: ['style-loader', 'css-loader']
             },
+            {
+                test: /\.vue$/,
+                use: 'vue-loader' 
+            }
         ]
     }
 }

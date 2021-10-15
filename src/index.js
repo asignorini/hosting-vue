@@ -1,3 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {createApp} from "vue";
+import router from "./router/index.js";
+import App from './App.vue';
 
-console.log("hola desde webpack =D");
+createApp(App)
+    .use(router)
+    .mount('#app');
