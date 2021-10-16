@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {VueLoaderPlugin} = require('vue-loader');
+const { VueLoaderPlugin } = require('vue-loader');
+const path = require('path');
 
 module.exports = {
     plugins: [
@@ -26,9 +27,13 @@ module.exports = {
                 use: ['style-loader', 'css-loader']
             },
             {
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
+            },
+            {
                 test: /\.vue$/,
-                use: 'vue-loader' 
-            }
+                use: 'vue-loader'
+            },
         ]
-    }
+    },
 }

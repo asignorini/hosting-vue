@@ -30,6 +30,7 @@
     "not dead"
   ],
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "bootstrap": "^4.6.0",
     "firebase": "^9.0.2",
     "jquery": "^1.9.1",
