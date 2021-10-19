@@ -11,115 +11,21 @@
             </li>
           </ul>
         </li>
-        <li class="row justify-content-center">
-          <div class="col-lg-4">
-            <ul class="plan-card">
+        <li class="row">
+          <div class="col-lg-4" v-for="(plan, index) in plans" :key="index">
+            <ul class="plan-card mb-5">
               <li class="text-center mb-3">
-                <h4 class="mb-0">Standard Hosting</h4>
-                <small>En oferta - Ahórrate 50%</small>
+                <h4 class="mb-0">{{ plan.title }}</h4>
+                <small>En oferta - Ahórrate {{ plan.discount }}%</small>
               </li>
               <li class="text-center mb-4">
-                <p class="plan-price"><span class="dolar-price">$</span>400</p>
+                <p class="plan-price"><span class="dolar-price">$</span>{{ plan.price }}</p>
                 <p class="text-muted">/por mes</p>
               </li>
               <li>
                 <button class="btn btn-call-to-action w-100">
                   Empieza aquí
                 </button>
-              </li>
-              <li>
-                <ul class="pl-0 pt-4">
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-          <div class="col-lg-4">
-            <ul class="plan-card">
-              <li class="text-center mb-3">
-                <h4 class="mb-0">Advance Hosting</h4>
-                <small>En oferta - Ahórrate 50%</small>
-              </li>
-              <li class="text-center mb-4">
-                <p class="plan-price"><span class="dolar-price">$</span>700</p>
-                <p class="text-muted">/por mes</p>
-              </li>
-              <li>
-                <button class="btn btn-call-to-action w-100">
-                  Empieza aquí
-                </button>
-              </li>
-              <li>
-                <ul class="pl-0 pt-4">
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 25 sitios</p>
-                  </li>
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </div>
-          <div class="col-lg-4">
-            <ul class="plan-card">
-              <li class="text-center mb-3">
-                <h4 class="mb-0">Unlimited Hosting</h4>
-                <small>En oferta - Ahórrate 50%</small>
-              </li>
-              <li class="text-center mb-4">
-                <p class="plan-price"><span class="dolar-price">$</span>1050</p>
-                <p class="text-muted">/por mes</p>
-              </li>
-              <li>
-                <button class="btn btn-call-to-action w-100">
-                  Empieza aquí
-                </button>
-              </li>
-              <li>
-                <ul class="pl-0 pt-4">
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Sitios ilimitados</p>
-                  </li>
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                  <li class="d-flex align-items-center mb-2">
-                    <i class="fas fa-check mr-3"></i>
-                    <p class="mb-0">Hasta 10 sitios</p>
-                  </li>
-                </ul>
               </li>
             </ul>
           </div>
@@ -129,8 +35,35 @@
 </template>
 
 <script>
+import {
+  query,
+  orderBy,
+  collection,
+  onSnapshot,
+} from "@firebase/firestore";
+import { db } from "../services/firebase";
+
 export default {
-    name: 'plans'
+    name: 'plans',
+    data: () => ({
+    plans: [],
+  }),
+  methods: {
+    async getPlans() {
+      const plans = await query(collection(db, "plans"), orderBy("price"));
+      onSnapshot(plans, (querySnapshot) => {
+        this.plans = [];
+        querySnapshot.forEach((doc) => {
+          let plan = doc.data();
+          plan.id = doc.id;
+          this.plans.push(plan);
+        });
+      });
+    }
+  },
+  mounted() {
+    this.getPlans();
+  },
 }
 </script>
 

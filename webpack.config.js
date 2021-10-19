@@ -3,6 +3,7 @@ const { VueLoaderPlugin } = require('vue-loader');
 const path = require('path');
 
 module.exports = {
+    entry: ["babel-polyfill", "./src/index.js"],
     plugins: [
         new HtmlWebpackPlugin({
             template: 'public/index.html',
